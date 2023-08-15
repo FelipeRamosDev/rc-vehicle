@@ -1,9 +1,12 @@
 {
   "name": "rc-vehicle",
+  "type": "module",
   "version": "0.1.0",
   "description": "The base for a many types of rc vehicles: cars, trucks, etc.",
   "main": "app.js",
   "scripts": {
+    "start": "sudo node app",
+    "dev": "sudo nodemon app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
