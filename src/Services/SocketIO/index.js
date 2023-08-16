@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import SocketConnection from './SocketConnection';
+import SocketConnection from './SocketConnection.js';
 
 export default class SocketIO {
     constructor (settings) {
