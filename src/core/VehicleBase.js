@@ -3,12 +3,18 @@ import Motor from './motors/MotorBase';
 import Lights from './lights/LightsBase';
 
 export default class VehicleBase {
-    constructor () {
+    constructor (app) {
         this.powerState = false;
         
-        this.driver = new Driver();
+        this._app = () => app;
+
+        this.driver = new Driver(this);
         this.motor = new Motor();
         this.lights = new Lights();
+    }
+
+    get app() {
+        return this._app();
     }
 
     async powerOnOff(state) {

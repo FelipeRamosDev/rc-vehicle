@@ -15,7 +15,7 @@ export default class SocketIO {
         this.ioServer.on('connect', (io) => {
             console.log('Socket connected!', io);
 
-            this.connections[io.id] = new SocketConnection(io);
+            this.connections.mainDriver = new SocketConnection(io);
         });
 
         this.ioServer.on('disconnect', (io) => {

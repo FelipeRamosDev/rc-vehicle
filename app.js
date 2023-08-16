@@ -1,5 +1,5 @@
 import API from './src/Services/API/index.js';
-import SocketIO from './src/Services/SocketIO/index.js';
+import VehicleBase from './src/core/VehicleBase.js'
 
 class App {
     constructor () {
@@ -7,7 +7,15 @@ class App {
             onListen: () => console.log('API server is running!')
         });
 
-        this.socketIO = new SocketIO();
+        this.vehicle;
+    }
+
+    initVehicle() {
+        try {
+            this.vehicle = new VehicleBase(this);
+        } catch (err) {
+            debugger;
+        }
     }
 }
 
