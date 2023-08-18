@@ -1,21 +1,25 @@
 import API from './src/Services/API/index.js';
-import VehicleBase from './src/core/VehicleBase.js'
+import Otter from './src/vehicles/Otter.js';
 
 class App {
     constructor () {
-        this.api = new API({
+        this.api = new API(this, {
             onListen: () => console.log('API server is running!')
         });
 
         this.vehicle;
     }
 
-    initVehicle() {
-        try {
-            this.vehicle = new VehicleBase(this);
-        } catch (err) {
-            debugger;
-        }
+    get initVehicle() {
+        return {
+            Otter: () => {
+                try {
+                    this.vehicle = new Otter(this);
+                } catch (err) {
+                    throw err;
+                }
+            }
+        };
     }
 }
 

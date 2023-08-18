@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import SocketConnection from './SocketConnection';
+import SocketConnection from './SocketConnection.js';
 
 export default class SocketIO {
     constructor (settings) {
@@ -7,7 +7,7 @@ export default class SocketIO {
             allowedOrigins,
             port
         } = Object(settings);
-        const origin = ['http://localhost:80', ...(allowedOrigins || [])];
+        const origin = ['http://localhost', ...(allowedOrigins || [])];
 
         this.ioServer = new Server({ cors: { origin }});
         this.connections = {};
