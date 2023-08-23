@@ -1,6 +1,6 @@
 export default {
-    LIGHTS: {
+    REGULAR_LIGHTS: {
         gpio: 23,
-        mode: 0
+        mode: 1
     }
 }

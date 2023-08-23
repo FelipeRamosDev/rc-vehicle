@@ -1,5 +1,5 @@
 import API from './src/Services/API/index.js';
-import Otter from './src/vehicles/Otter.js';
+import Otter from './src/vehicles/Otter/index.js';
 
 class App {
     constructor () {
