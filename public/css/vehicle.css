@@ -10,3 +10,10 @@
     bottom: 1rem;
     height: 95%;
 }
+
+.steering-wheel {
+    position: fixed;
+    width: 40%;
+    top: 50vh;
+    left: 1%;
+}

@@ -6,6 +6,7 @@ export default class VehicleBase {
         
         this._app = () => app;
 
+        this.steeringPosition = 0;
         this.lights = new Lights(this);
     }
 

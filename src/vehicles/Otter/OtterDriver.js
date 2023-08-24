@@ -29,11 +29,42 @@ export default class OtterDriver extends DriverBase {
                 }
 
                 const newValue = Number(value);
-                this.vehicle.aceleration(newValue);
-                this.connection.emit('aceleration:change:response', { success: true, currentValue: newValue });
+                const parsedValue = this.parseSteeringWheel(newValue, this.vehicle.steeringPosition);
+
+                this.vehicle.aceleration(parsedValue);
+                this.connection.emit('aceleration:change:response', { success: true, currentValue: parsedValue });
             } catch (err) {
                 this.connection.emit('aceleration:change:response', { error: true, data: err });
             }
         });
+
+        connection.on('steering-wheel:change', (value) => {
+            if (isNaN(value)) {
+                throw new Error('Value should be a number, but received NaN!');
+            }
+
+            const newValue = Number(value);
+            this.vehicle.steeringPosition = newValue;
+        });
+    }
+
+    parseSteeringWheel(aceleration, turnPercent) {
+        const turnDecimal = turnPercent / 100;
+        const result = {};
+    
+    
+        if (turnPercent < 0) {
+            const normalized = turnDecimal * (-1);
+            result.motorA = aceleration - (aceleration * normalized);
+            result.motorB = aceleration;
+        } else if (turnPercent > 0) {
+            result.motorA = aceleration;
+            result.motorB = aceleration - (aceleration * turnDecimal);
+        } else {
+            result.motorA = aceleration;
+            result.motorB = aceleration;
+        }
+    
+        return result;
     }
 }

@@ -47,18 +47,48 @@ window.addEventListener('load', () => {
 
     $('[js="lights:toggle"]').on('click', function () {
         if (!socket) {
-            throw 'Vehicle socket is not connected!'
+            throw 'Vehicle socket is not connected!';
         }
 
         socket.emit('lights:regular:toggle');
     });
 
     $('[js="aceleration"]').on('input', function () {
+        const $input = $(this);
+        const value = Number($input.val());
+
         if (!socket) {
-            throw 'Vehicle socket is not connected!'
+            throw 'Vehicle socket is not connected!';
         }
 
+        socket.emit('aceleration:change', value);
+    });
+    
+    $('[js="aceleration"]').on('change', function () {
+        if (!socket) {
+            throw 'Vehicle socket is not connected!';
+        }
+
+        socket.emit('aceleration:change', 0);
+    });
+
+    $('[js="steering-wheel"]').on('input', function () {
         const $input = $(this);
-        socket.emit('aceleration:change', Number($input.val()));
+        const value = Number($input.val());
+
+        if (!socket) {
+            throw 'Vehicle socket is not connected!';
+        }
+
+        socket.emit('steering-wheel:change', value);
+    });
+
+    
+    $('[js="steering-wheel"]').on('change', function () {
+        if (!socket) {
+            throw 'Vehicle socket is not connected!';
+        }
+
+        socket.emit('steering-wheel:change', 0);
     });
 });
