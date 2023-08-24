@@ -1,4 +1,3 @@
-import Motor from './motors/MotorBase.js';
 import Lights from './lights/LightsBase.js';
 
 export default class VehicleBase {
@@ -7,7 +6,6 @@ export default class VehicleBase {
         
         this._app = () => app;
 
-        this.motor = new Motor(this);
         this.lights = new Lights(this);
     }
 

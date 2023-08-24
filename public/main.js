@@ -52,4 +52,13 @@ window.addEventListener('load', () => {
 
         socket.emit('lights:regular:toggle');
     });
+
+    $('[js="aceleration"]').on('input', function () {
+        if (!socket) {
+            throw 'Vehicle socket is not connected!'
+        }
+
+        const $input = $(this);
+        socket.emit('aceleration:change', Number($input.val()));
+    });
 });
