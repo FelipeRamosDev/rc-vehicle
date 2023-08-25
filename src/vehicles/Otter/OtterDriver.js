@@ -29,10 +29,9 @@ export default class OtterDriver extends DriverBase {
                 }
 
                 const newValue = Number(value);
-                const parsedValue = this.parseSteeringWheel(newValue, this.vehicle.steeringPosition);
 
-                this.vehicle.aceleration(parsedValue);
-                this.connection.emit('aceleration:change:response', { success: true, currentValue: parsedValue });
+                this.vehicle.aceleration(newValue);
+                this.connection.emit('aceleration:change:response', { success: true, currentValue: newValue });
             } catch (err) {
                 this.connection.emit('aceleration:change:response', { error: true, data: err });
             }
@@ -44,27 +43,33 @@ export default class OtterDriver extends DriverBase {
             }
 
             const newValue = Number(value);
+
             this.vehicle.steeringPosition = newValue;
+            this.vehicle.aceleration();
         });
     }
 
-    parseSteeringWheel(aceleration, turnPercent) {
+    parseSteeringWheel() {
+        const aceleration = this.vehicle.currentAceleration;
+        const turnPercent = this.vehicle.steeringPosition;
         const turnDecimal = turnPercent / 100;
         const result = {};
-    
-    
-        if (turnPercent < 0) {
+
+        if (turnDecimal < 0) {
             const normalized = turnDecimal * (-1);
-            result.motorA = aceleration - (aceleration * normalized);
-            result.motorB = aceleration;
-        } else if (turnPercent > 0) {
-            result.motorA = aceleration;
-            result.motorB = aceleration - (aceleration * turnDecimal);
+            const A = aceleration - (aceleration * normalized);
+
+            result.motorA = parseInt(A);
+            result.motorB = parseInt(aceleration);
+        } else if (turnDecimal > 0) {
+            const B = aceleration - (aceleration * turnDecimal);
+            result.motorA = parseInt(aceleration);
+            result.motorB = parseInt(B);
         } else {
-            result.motorA = aceleration;
-            result.motorB = aceleration;
+            result.motorA = parseInt(aceleration);
+            result.motorB = parseInt(aceleration);
         }
-    
+
         return result;
     }
 }

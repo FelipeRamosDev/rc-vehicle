@@ -33,7 +33,11 @@ export default class Otter extends VehicleBase {
 
     aceleration(value) {
         try {
-            this.motorDriver.aceleration(value);
+            if (value !== undefined && value !== null) {
+                this.currentAceleration = value;
+            }
+
+            this.motorDriver.aceleration(this.driver.parseSteeringWheel());
         } catch (err) {
             throw err;
         }
