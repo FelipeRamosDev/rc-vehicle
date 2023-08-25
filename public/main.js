@@ -10,7 +10,7 @@ window.addEventListener('load', () => {
             method: 'POST',
             data: JSON.stringify({ vehicleID }),
             success: () => {
-                window.socket = io('http://localhost:5555');
+                window.socket = io('http://192.168.15.45:5555');
 
                 socket.on('connect', () => {
                     console.log('Vehicle socket connection opened!');
@@ -47,18 +47,54 @@ window.addEventListener('load', () => {
 
     $('[js="lights:toggle"]').on('click', function () {
         if (!socket) {
-            throw 'Vehicle socket is not connected!'
+            throw 'Vehicle socket is not connected!';
         }
 
         socket.emit('lights:regular:toggle');
     });
 
     $('[js="aceleration"]').on('input', function () {
+        const $input = $(this);
+        const value = Number($input.val());
+
         if (!socket) {
-            throw 'Vehicle socket is not connected!'
+            throw 'Vehicle socket is not connected!';
         }
 
+        socket.emit('aceleration:change', value);
+    });
+    
+    $('[js="aceleration"]').on('change', function () {
         const $input = $(this);
-        socket.emit('aceleration:change', Number($input.val()));
+
+        if (!socket) {
+            throw 'Vehicle socket is not connected!';
+        }
+
+        $input.val('0');
+        socket.emit('aceleration:change', 0);
+    });
+
+    $('[js="steering-wheel"]').on('input', function () {
+        const $input = $(this);
+        const value = Number($input.val());
+
+        if (!socket) {
+            throw 'Vehicle socket is not connected!';
+        }
+
+        socket.emit('steering-wheel:change', value);
+    });
+
+    
+    $('[js="steering-wheel"]').on('change', function () {
+        const $input = $(this);
+
+        if (!socket) {
+            throw 'Vehicle socket is not connected!';
+        }
+
+        $input.val('0');
+        socket.emit('steering-wheel:change', 0);
     });
 });

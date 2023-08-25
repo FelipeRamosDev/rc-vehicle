@@ -57,13 +57,15 @@ export default class DRIVER_L298N {
         this.setDir(!this.currentDir);
     }
 
-    aceleration(value) {
-        if (value <= this.motorA.pwmRange) {
-            this.ENA.pwmWrite(this.motorA.toPWM(value));
+    aceleration(values) {
+        const { motorA, motorB } = Object(values);
+
+        if (motorA <= this.motorA.pwmRange) {
+            this.ENA.pwmWrite(this.motorA.toPWM(motorA));
         }
 
-        if (this.motorB && value <= this.motorB.pwmRange) {
-            this.ENB.pwmWrite(this.motorB.toPWM(value));
+        if (this.motorB && motorB <= this.motorB.pwmRange) {
+            this.ENB.pwmWrite(this.motorB.toPWM(motorB));
         }
     }
 }

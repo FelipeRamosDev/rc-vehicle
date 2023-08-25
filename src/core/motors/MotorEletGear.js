@@ -10,6 +10,6 @@ export default class MotorEletGear {
 
     toPWM(percentValue) {
         const decimal = percentValue / 100;
-        return this.pwmRange * decimal;
+        return parseInt(this.pwmRange * decimal);
     }
 }
