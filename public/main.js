@@ -10,7 +10,7 @@ window.addEventListener('load', () => {
             method: 'POST',
             data: JSON.stringify({ vehicleID }),
             success: () => {
-                window.socket = io('http://localhost:5555');
+                window.socket = io('http://192.168.15.45:5555');
 
                 socket.on('connect', () => {
                     console.log('Vehicle socket connection opened!');
@@ -65,10 +65,13 @@ window.addEventListener('load', () => {
     });
     
     $('[js="aceleration"]').on('change', function () {
+        const $input = $(this);
+
         if (!socket) {
             throw 'Vehicle socket is not connected!';
         }
 
+        $input.val('0');
         socket.emit('aceleration:change', 0);
     });
 
@@ -85,10 +88,13 @@ window.addEventListener('load', () => {
 
     
     $('[js="steering-wheel"]').on('change', function () {
+        const $input = $(this);
+
         if (!socket) {
             throw 'Vehicle socket is not connected!';
         }
 
+        $input.val('0');
         socket.emit('steering-wheel:change', 0);
     });
 });
