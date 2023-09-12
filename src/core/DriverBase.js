@@ -5,7 +5,7 @@ export default class DriverBase {
         this._vehicle = () => vehicle;
 
         this.socketIO = new SocketIO({
-            allowedOrigins: ['http://192.168.15.45'],
+            allowedOrigins: ['http://192.168.15.45', '*', 'http://192.168.15.54', 'http://192.168.15.3'],
             onConnected: (connection) => {
                 this.initSocketListeners(connection);
             }
