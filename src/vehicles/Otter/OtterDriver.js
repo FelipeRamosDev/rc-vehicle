@@ -12,6 +12,18 @@ export default class OtterDriver extends DriverBase {
         return mainDriver && mainDriver.connection;
     }
 
+    serialOnOpen() {
+        console.log('Serial Connected!');
+    }
+
+    serialOnData(data) {
+        console.log(data);
+    }
+
+    serialOnError(err) {
+        throw err;
+    }
+
     initSocketListeners(connection) {
         connection.on('lights:regular:toggle', () => {
             try {
