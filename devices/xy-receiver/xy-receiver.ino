@@ -11,13 +11,15 @@ void setup() {
 void loop() {
   String received = lora32.readString();
 
-  lora32.displayStartString("Analog Joystick:");
-  lora32.displayBreakLine(received);
-  lora32.displayEndString();
+  if (received != "") {
+    lora32.displayStartString("Analog Joystick:");
+    lora32.displayBreakLine(received);
+    lora32.displayEndString();
 
-  // Sending via serial RX TX
-  Serial.println(received);
-
+    // Sending via serial RX TX
+    Serial.println(received);
+  }
+  
   // Wait for a second before sending another packet
   delay(1);
 }
