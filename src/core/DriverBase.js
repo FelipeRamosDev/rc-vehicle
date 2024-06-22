@@ -1,15 +1,29 @@
-import SocketIO from '../Services/SocketIO/index.js';
+import { SerialPeer } from 'serial-peers';
+import driver from '/home/felipe/Documents/repos/rc-vehicle/src/controllers/driver.js';
 
 export default class DriverBase {
     constructor (vehicle) {
         this._vehicle = () => vehicle;
 
-        this.socketIO = new SocketIO({
-            allowedOrigins: ['http://192.168.15.45', '*', 'http://192.168.15.54', 'http://192.168.15.3'],
-            onConnected: (connection) => {
-                this.initSocketListeners(connection);
-            }
+        this.serialPort = new SerialPeer({
+            baudRate: 1000000,
+            onOpen: this.serialOnOpen,
+            onData: this.serialOnData,
+            onError: this.serialOnError,
+            endpoints: [ driver ]
         });
+    }
+    
+    serialOnOpen() {
+        // Error preventing
+    }
+
+    serialOnData() {
+        // Error preventing
+    }
+
+    serialOnError(err) {
+        throw err;
     }
 
     get vehicle() {

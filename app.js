@@ -2,12 +2,17 @@ import API from './src/Services/API/index.js';
 import Otter from './src/vehicles/Otter/index.js';
 
 class App {
-    constructor () {
+    constructor (startVehicle) {
         this.api = new API(this, {
             onListen: () => console.log('API server is running!')
         });
 
         this.vehicle;
+
+        const vehicleToStart = this.initVehicle[startVehicle];
+        if (vehicleToStart) {
+            vehicleToStart();
+        }
     }
 
     get initVehicle() {
@@ -23,4 +28,4 @@ class App {
     }
 }
 
-global.app = new App();
+global.app = new App('Otter');
