@@ -1,5 +1,5 @@
-import { SerialPeer, SerialEndpoint } from 'serial-peers';
-import driver from '../controllers/driver';
+import { SerialPeer } from 'serial-peers';
+import driver from '/home/felipe/Documents/repos/rc-vehicle/src/controllers/driver.js';
 
 export default class DriverBase {
     constructor (vehicle) {
