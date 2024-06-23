@@ -11,9 +11,6 @@ const endpoint = new SerialEndpoint({
          type: Number,
          required: true
       }
-   },
-   controller: function (body) {
-      console.log('Controller /driver:', body);
    }
 });
 
