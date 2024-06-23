@@ -32,8 +32,8 @@ export default class DRIVER_L298N {
     }
 
     setDir(value) {
-        this.IN1.digitalWrite(value);
-        this.IN2.digitalWrite(!value);
+        this.IN1.digitalWrite(!value);
+        this.IN2.digitalWrite(value);
 
         if (this.motorB) {
             this.IN3.digitalWrite(value);

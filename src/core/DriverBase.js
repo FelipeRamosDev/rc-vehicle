@@ -1,5 +1,4 @@
 import { SerialPeer } from 'serial-peers';
-import driver from '/home/felipe/Documents/repos/rc-vehicle/src/controllers/driver.js';
 
 export default class DriverBase {
     constructor (vehicle) {
@@ -9,8 +8,7 @@ export default class DriverBase {
             baudRate: 1000000,
             onOpen: this.serialOnOpen,
             onData: this.serialOnData,
-            onError: this.serialOnError,
-            endpoints: [ driver ]
+            onError: this.serialOnError
         });
     }
     

@@ -31,6 +31,10 @@ export default class Otter extends VehicleBase {
         }
     }
 
+    invertDirection() {
+        this.motorDriver.invertDirection();
+    }
+
     aceleration(value) {
         try {
             if (value !== undefined && value !== null) {

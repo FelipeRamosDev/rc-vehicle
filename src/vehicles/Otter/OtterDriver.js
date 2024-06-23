@@ -1,8 +1,13 @@
 import DriverBase from '../../core/DriverBase.js';
+import driver from '/home/felipe/Documents/repos/rc-vehicle/src/controllers/driver.js';
 
 export default class OtterDriver extends DriverBase {
     constructor (vehicle) {
+        const driverEndpoint = driver;
         super(vehicle);
+
+        driverEndpoint.setController(this.driverController.bind(this));
+        this.serialPort.setEndpoint(driverEndpoint);
     }
 
     get connection() {
@@ -12,53 +17,51 @@ export default class OtterDriver extends DriverBase {
         return mainDriver && mainDriver.connection;
     }
 
-    serialOnOpen() {
-        console.log('Serial Connected!');
+    driverController(data) {
+        const parsed = this.parseXY(data);
+        if (!parsed) {
+            return;
+        }
+
+        const { x, y } = parsed;
+        this.vehicle.steeringPosition = x;
+
+        if (this.vehicle.motorDriver.currentDir && y < 0) {
+            this.vehicle.invertDirection();
+        } else if (!this.vehicle.motorDriver.currentDir && y > 0) {
+            this.vehicle.invertDirection();
+        }
+
+        this.vehicle.aceleration(Math.abs(y));
     }
 
-    serialOnData(data) {
-        console.log(data);
+    parseXY(data) {
+        const xResult = this.convertRawXY(data.x, 5);
+        const yResult = this.convertRawXY(data.y, 6) * -1;
+
+        if (!isNaN(xResult) && !isNaN(xResult)) {
+            return {
+                x: xResult,
+                y: yResult
+            };
+        }
     }
 
-    serialOnError(err) {
-        throw err;
-    }
+    convertRawXY(value, threshold = 0) {
+        const oldMin = 0;
+        const oldMax = 4095;
+        const newMin = -100;
+        const newMax = 100;
+        const result = ((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin;
+        let parsed = parseInt(result) + threshold;
 
-    initSocketListeners(connection) {
-        connection.on('lights:regular:toggle', () => {
-            try {
-                const currentState = this.vehicle.toggleRegularLights();
-                this.connection.emit('lights:regular:toggle:response', { success: true, currentState });
-            } catch (err) {
-                this.connection.emit('lights:regular:toggle:response', { error: true, data: err });
-            }
-        });
+        if (parsed > 93) {
+            parsed = 100;
+        } else if (parsed < -93) {
+            parsed = -100;
+        }
 
-        connection.on('aceleration:change', (value) => {
-            try {
-                if (isNaN(value)) {
-                    throw new Error('Value should be a number, but received NaN!');
-                }
-
-                const newValue = Number(value);
-
-                this.vehicle.aceleration(newValue);
-                this.connection.emit('aceleration:change:response', { success: true, currentValue: newValue });
-            } catch (err) {
-                this.connection.emit('aceleration:change:response', { error: true, data: err });
-            }
-        });
-
-        connection.on('steering-wheel:change', (value) => {
-            if (isNaN(value)) {
-                throw new Error('Value should be a number, but received NaN!');
-            }
-
-            const newValue = Number(value);
-
-            this.vehicle.steeringPosition = newValue;
-            this.vehicle.aceleration();
-        });
+        return parsed;
     }
 
     parseSteeringWheel() {
