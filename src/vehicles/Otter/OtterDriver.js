@@ -23,26 +23,26 @@ export default class OtterDriver extends DriverBase {
             return;
         }
 
-        const { x, y } = parsed;
-        this.vehicle.steeringPosition = x;
+        const { steering, acceleration } = parsed;
+        this.vehicle.steeringPosition = steering;
 
-        if (this.vehicle.motorDriver.currentDir && y < 0) {
+        if (this.vehicle.motorDriver.currentDir && acceleration < 0) {
             this.vehicle.invertDirection();
-        } else if (!this.vehicle.motorDriver.currentDir && y > 0) {
+        } else if (!this.vehicle.motorDriver.currentDir && acceleration > 0) {
             this.vehicle.invertDirection();
         }
 
-        this.vehicle.aceleration(Math.abs(y));
+        this.vehicle.aceleration(Math.abs(acceleration));
     }
 
     parseXY(data) {
-        const xResult = this.convertRawXY(data.x, 5);
+        const xResult = this.convertRawXY(data.x, 5) * -1;
         const yResult = this.convertRawXY(data.y, 6) * -1;
 
-        if (!isNaN(xResult) && !isNaN(xResult)) {
+        if (!isNaN(xResult) && !isNaN(yResult)) {
             return {
-                x: xResult,
-                y: yResult
+                steering: xResult,
+                acceleration: yResult
             };
         }
     }
@@ -66,8 +66,8 @@ export default class OtterDriver extends DriverBase {
 
     parseSteeringWheel() {
         const aceleration = this.vehicle.currentAceleration;
-        const turnPercent = this.vehicle.steeringPosition;
-        const turnDecimal = turnPercent / 100;
+        const steering = this.vehicle.steeringPosition;
+        const turnDecimal = steering / 100;
         const result = {};
 
         if (turnDecimal < 0) {
@@ -85,6 +85,7 @@ export default class OtterDriver extends DriverBase {
             result.motorB = parseInt(aceleration);
         }
 
+        console.log(result);
         return result;
     }
 }
