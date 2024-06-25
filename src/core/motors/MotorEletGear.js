@@ -3,7 +3,7 @@ export default class MotorEletGear {
         const { pwmRange, pwmFrequency } = Object(setup);
 
         this.pwmRange = pwmRange || 100;
-        this.pwmFrequency = pwmFrequency || 11200;
+        this.pwmFrequency = pwmFrequency || 1200;
 
         this.currentDir = true;
     }
